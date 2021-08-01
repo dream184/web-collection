@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="grid.css">
+  <style>
+    /* * {
+      outline: 1px solid red;
+    } */
+
+    .calculator {
+      width: 100%;
+    }
+
+    .calculator-container {
+      width: 600px;
+      margin: auto;
+      background-color: #D9F7F7;
+    }
+
+
+
+    #displayResult {
+      padding: 10px;
+      font-weight: bold;
+      font-size: 50px;
+      background-color: lightblue;
+      margin-bottom: 8px;
+      text-align: right;
+    }
+
+
+
+    #buttonGroup {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 14px;
+      font-size: 24px;
+      background-color: lightgray;
+      cursor: pointer;
+      width: 60px;
+    }
+
+    .row-cols-3 {
+      flex-wrap: wrap-reverse;
+
+    }
+
+    .btn-zero {
+      width: 66.6666%;
+    }
+
+    .button-container.top button {
+      margin-bottom: 0;
+    }
+  </style>
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const buttonGroup = document.querySelector("#buttonGroup")
+      const display = document.querySelector("#displayResult")
+
+      let sum = ""
+      let previousNumber = 0
+      let secondNumber = 0
+      let totalNumber = 0
+      let operator = ""
+
+      buttonGroup.addEventListener("click", (event) => {
+        let clicked = event.target
+
+        if (clicked.id === "") {
+          return false
+        }
+
+        if (Number(clicked.id) <= 9) {
+          if (sum === "0") {
+            sum = clicked.id
+            display.textContent = sum
+          }
+          else {
+            addString()
+            displaySum(sum)
+          }
+        }
+
+        if (clicked.id === "AC") {
+          sum = "0"
+          previousNumber = 0
+          totalNumber = 0
+          secondNumber = 0
+          operator = ""
+          equalClicked = false
+          displaySum(sum)
+        }
+
+        if (clicked.id === "+/-") {
+
+          if (sum) {
+            if (!sum.includes("-")) {
+              sum = `-${sum}`
+              displaySum(sum)
+            } else if (sum.includes("-")) {
+              sum = sum.replace("-", "")
+              displaySum(sum)
+            }
+          } else if (sum === "") {
+            sum = `${totalNumber}`
+            if (!sum.includes("-")) {
+              sum = `-${sum}`
+              displaySum(sum)
+            } else if (sum.includes("-")) {
+              sum = sum.replace("-", "")
+              displaySum(sum)
+            }
+          }
+        }
+
+        if (clicked.id === ".") {
+          if (!sum.includes(".")) {
+            addString()
+            displaySum(sum)
+          }
+
+        }
+
+        if (clicked.id === "+") {
+          if (previousNumber === 0) {
+            previousNumber = Number(sum)
+            operator = "+"
+            console.log(previousNumber)
+            sum = ""
+          } else {
+            secondNumber = Number(sum)
+            console.log(secondNumber)
+            calculate(operator)
+            previousNumber = totalNumber
+            console.log(`total${totalNumber}`)
+            operator = "+"
+            sum = ""
+            displaySum(totalNumber)///
+          }
+        }
+
+        if (clicked.id === "-") {
+          if (previousNumber === 0) {
+            previousNumber = Number(sum)
+            operator = "-"
+            console.log(previousNumber)
+            sum = ""
+          } else {
+            secondNumber = Number(sum)
+            calculate(operator)
+            previousNumber = totalNumber
+            console.log(`total${totalNumber}`)
+            operator = "-"
+            sum = ""
+            displaySum(totalNumber)///
+          }
+        }
+
+        if (clicked.id === "×") {
+          if (previousNumber === 0) {
+            previousNumber = Number(sum)
+            operator = "×"
+            console.log(previousNumber)
+            sum = ""
+          } else if (secondNumber === null) {
+
+            return false
+
+          } else if (operator === "%") {
+            secondNumber = Number(sum)
+            previousNumber = totalNumber
+            console.log(`total${totalNumber}`)
+            secondNumber = null
+            operator = "×"
+            sum = ""
+            displaySum(totalNumber)
+          } else {
+            secondNumber = Number(sum)
+            calculate(operator)
+            previousNumber = totalNumber
+            console.log(`total${totalNumber}`)
+            secondNumber = null
+            operator = "×"
+            sum = ""
+            displaySum(totalNumber)///
+          }
+        }
+
+
+        if (clicked.id === "÷") {
+          if (previousNumber === 0) {
+            previousNumber = Number(sum)
+            operator = "÷"
+            console.log(previousNumber)
+            sum = ""
+          } else if (secondNumber === null) {
+            return false
+
+          } else if (operator === "%") {
+            secondNumber = Number(sum)
+            previousNumber = totalNumber
+            secondNumber = null
+            operator = "÷"
+            sum = ""
+            displaySum(totalNumber)
+          } else {
+
+            secondNumber = Number(sum)
+            calculate(operator)
+            previousNumber = totalNumber
+            secondNumber = null
+            operator = "÷"
+            sum = ""
+            displaySum(totalNumber)///
+          }
+        }
+
+        if (clicked.id === "%") {
+          if (totalNumber === 0) {
+            totalNumber = Number(sum)
+            operator = "%"
+            calculate(operator)
+            displaySum(totalNumber)
+            previousNumber = totalNumber
+          } else {
+            operator = "%"
+            calculate(operator)
+            displaySum(totalNumber)
+            previousNumber = totalNumber
+            sum = totalNumber
+          }
+        }
+
+
+        if (clicked.id === "=") {
+
+          if (secondNumber === null) {
+            return false
+          }
+
+          if (operator) {
+            secondNumber = Number(sum)
+            calculate(operator)
+            displaySum(totalNumber)
+            console.log(` = 的 ${totalNumber}`)
+            previousNumber = totalNumber
+            sum = ""
+            operator = ""
+          } else if (operator === "") {
+            return false
+          }
+        }
+
+
+
+        function calculate(operator) {
+          switch (operator) {
+            case "+":
+              totalNumber = previousNumber + secondNumber
+              console.log(totalNumber)
+              break
+            case "-":
+              totalNumber = previousNumber - secondNumber
+              console.log(totalNumber)
+              break
+            case "×":
+              totalNumber = previousNumber * secondNumber
+              console.log(totalNumber)
+              break
+            case "÷":
+              totalNumber = previousNumber / secondNumber
+              console.log(totalNumber)
+              break
+            case "%":
+              totalNumber = totalNumber / 100
+              console.log(totalNumber)
+              break
+          }
+        }
+
+        function addString() {
+          sum = sum + clicked.id
+          secondNumber = 0
+        }
+
+        function displaySum(sum) {
+          display.textContent = sum
+        }
+      })
+    })
+  </script>
+</head>
+
+
+<body>
+
+  <div class="calculator">
+    <div class="calculator-container">
+
+      <div class="row">
+        <div class="col-12">
+          <div id="displayResult">0</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="button-container">
+
+            <section id="buttonGroup">
+
+              <div class="col-12">
+                <div class="button-container top">
+                  <div class="row row-cols-4">
+                    <button id="AC">AC</button>
+                    <button id="+/-">+/-</button>
+                    <button id="%">%</button>
+                    <button id="÷">÷</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-9">
+                <div class="row row-cols-3">
+                  <button class="btn-zero" id="0">0</button>
+                  <button id=".">.</button>
+                  <button id="1">1</button>
+                  <button id="2">2</button>
+                  <button id="3">3</button>
+                  <button id="4">4</button>
+                  <button id="5">5</button>
+                  <button id="6">6</button>
+                  <button id="7">7</button>
+                  <button id="8">8</button>
+                  <button id="9">9</button>
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="row row-cols-1">
+                  <button id="×">×</button>
+                  <button id="-">-</button>
+                  <button id="+">+</button>
+                  <button id="=">=</button>
+                </div>
+              </div>
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+
+</html>
