@@ -174,11 +174,13 @@
             operator = "×"
             console.log(previousNumber)
             sum = ""
-          } else if (secondNumber === null) {
+          }
+          else if (secondNumber === null) {
 
             return false
 
-          } else if (operator === "%") {
+          } 
+          else if (operator === "%") {
             secondNumber = Number(sum)
             previousNumber = totalNumber
             console.log(`total${totalNumber}`)
@@ -299,6 +301,26 @@
           display.textContent = sum
         }
       })
+
+      function add(op) {
+        if (previousNumber === 0) {
+          previousNumber = Number(sum)
+          operator = op
+          console.log(previousNumber)
+          sum = ""
+        } else {
+          secondNumber = Number(sum)
+          console.log(secondNumber)
+          calculate(operator)
+          previousNumber = totalNumber
+          console.log(`total${totalNumber}`)
+          operator = "+"
+          sum = ""
+          displaySum(totalNumber)///
+        }
+      }
+
+
     })
   </script>
 </head>

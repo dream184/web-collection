@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      outline: 1px solid red;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .timer {
+      font-size: 128px;
+
+    }
+
+    .progress-bar {
+      background-color: #F08080;
+
+      position: fixed;
+      top: 0;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      z-index: -1;
+    }
+  </style>
+  
+</head>
+
+<body>
+
+  <main>
+    <div class="timer">00 : 00</div>
+    <div class="progress-bar" style="width: 100%;"></div>
+  </main>
+  <script src="script.js"></script>
+</body>
+
+</html>
